@@ -1,12 +1,25 @@
-struct Header {
-    name: &str,
-    value: &str,
+pub struct Header {
+    name: String,
+    value: String,
 }
 
-fn to_header(name: &str, value: &str) -> Header {
-    return Header { name, value };
-}
+impl Header {
+    fn new(maybe_header: String) -> Option<Header> {
+        if maybe_header.is_empty() {
+            return None;
+        }
 
-fn parse_header(header: Header) -> &str {
-    return format!("{header.name}: {header.value");
+        let mid = maybe_header.find(": ").unwrap();
+
+        let (name, value) = maybe_header.split_at(mid);
+
+        return Some(Header {
+            name: name.to_string(),
+            value: value.to_string(),
+        });
+    }
+
+    fn to_str(&self) -> String {
+        return format!("{}: {}", &self.name, &self.value);
+    }
 }
